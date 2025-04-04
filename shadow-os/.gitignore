@@ -1,0 +1,4 @@
+venv/
+data/vaultmind.db
+__pycache__/
+*.pyc
