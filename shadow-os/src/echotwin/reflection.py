@@ -1,1 +1,0 @@
-# EchoTwin reflection logic
