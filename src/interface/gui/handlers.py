@@ -25,15 +25,24 @@ class SubmitHandler:
         recognizer = sr.Recognizer()
         with sr.Microphone() as source:
             self.echo_label.setText("EchoTwin: Listening...")
-            audio = recognizer.listen(source)
+            recognizer.adjust_for_ambient_noise(source, duration=1)  # Calibrate noise
             try:
+                print("Listening for 5 seconds...")  # Debug
+                audio = recognizer.listen(source, timeout=5, phrase_time_limit=5)
+                print("Processing audio...")  # Debug
                 thought = recognizer.recognize_google(audio)
                 self.thought_input.setText(thought)
+                self.echo_label.setText(f"EchoTwin: Understood: '{thought}'")
                 self.on_submit()
             except sr.UnknownValueError:
-                self.echo_label.setText("EchoTwin: Couldn’t understand you.")
+                self.echo_label.setText("EchoTwin: Couldn’t understand you—speak louder or clearer.")
+                print("Failed: UnknownValueError")  # Debug
             except sr.RequestError:
-                self.echo_label.setText("EchoTwin: Network error—try again.")
+                self.echo_label.setText("EchoTwin: Network error—check your connection.")
+                print("Failed: RequestError")  # Debug
+            except Exception as e:
+                self.echo_label.setText(f"EchoTwin: Error—{str(e)}")
+                print(f"Unexpected error: {e}")  # Debug
 
     def update_timeline(self):
         thoughts = get_all_thoughts()
