@@ -1,6 +1,6 @@
 import sys
 from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QVBoxLayout
-from src.interface.gui.widgets import ThoughtInput, SubmitButton, EchoLabel, TimelineDisplay
+from src.interface.gui.widgets import ThoughtInput, SubmitButton, EchoLabel, TimelineDisplay, VoiceButton
 from src.interface.gui.handlers import SubmitHandler
 
 class ShadowOSWindow(QMainWindow):
@@ -19,18 +19,21 @@ class ShadowOSWindow(QMainWindow):
         # Widgets
         self.thought_input = ThoughtInput()
         self.submit_btn = SubmitButton()
+        self.voice_btn = VoiceButton()
         self.echo_label = EchoLabel()
         self.timeline = TimelineDisplay()
 
         # Add to layout
         layout.addWidget(self.thought_input)
         layout.addWidget(self.submit_btn)
+        layout.addWidget(self.voice_btn)
         layout.addWidget(self.echo_label)
         layout.addWidget(self.timeline)
 
         # Connect handler
         self.handler = SubmitHandler(self.thought_input, self.echo_label, self.timeline)
         self.submit_btn.clicked.connect(self.handler.on_submit)
+        self.voice_btn.clicked.connect(self.handler.on_voice)
 
         # Style (dark theme)
         self.setStyleSheet("""

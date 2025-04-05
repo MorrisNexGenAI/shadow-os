@@ -11,6 +11,10 @@ class SubmitButton(QPushButton):
     def __init__(self):
         super().__init__("Reflect")
 
+class VoiceButton(QPushButton):
+    def __init__(self):
+        super().__init__("Speak")
+
 class EchoLabel(QLabel):
     def __init__(self):
         super().__init__("EchoTwin will respond here...")

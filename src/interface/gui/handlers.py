@@ -1,3 +1,4 @@
+import speech_recognition as sr
 from src.vaultmind.storage import init_db, store_thought, get_all_thoughts
 from src.vaultmind.analysis import analyze_thought
 from src.echotwin.reflection import get_insight
@@ -19,6 +20,20 @@ class SubmitHandler:
             self.echo_label.setText(f"EchoTwin: {insight}")
             self.thought_input.clear()
             self.update_timeline()
+
+    def on_voice(self):
+        recognizer = sr.Recognizer()
+        with sr.Microphone() as source:
+            self.echo_label.setText("EchoTwin: Listening...")
+            audio = recognizer.listen(source)
+            try:
+                thought = recognizer.recognize_google(audio)
+                self.thought_input.setText(thought)
+                self.on_submit()
+            except sr.UnknownValueError:
+                self.echo_label.setText("EchoTwin: Couldn’t understand you.")
+            except sr.RequestError:
+                self.echo_label.setText("EchoTwin: Network error—try again.")
 
     def update_timeline(self):
         thoughts = get_all_thoughts()
